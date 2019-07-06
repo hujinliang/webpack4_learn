@@ -11,7 +11,7 @@
     import componentB from './componentB'
     import _ from 'lodash'
     import '@style/app.scss'
-    import $ from 'jquery'
+    import '@style/common/common.css'
     export default {
         name: "componentA",
         components: {
@@ -23,8 +23,7 @@
         methods: {
             log() {
                 console.log(_.join(['1', '2']))
-                require.ensure([], (require) => {
-                    const logger = require('logger').default
+                import(/* webpackPrefetch: true */ 'logger').then(({ default: logger }) => {
                     console.log(logger)
                     logger.log('async module 1')
                 })
