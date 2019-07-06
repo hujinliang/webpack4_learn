@@ -2,9 +2,11 @@ const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 
 module.exports = {
+    mode: 'production',
     entry: {
         index: path.resolve(__dirname, './src/pageA.js'),
         // vendor: [path.resolve(__dirname, './src/utils/logger.js'),
@@ -40,11 +42,16 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
-                commons: {
-                    priority: 2,
-                    name: 'common',
-                    chunks: "initial"
+                // priority：优先级 值越大优先级越高
+                // chunks: chunk来源 async(动态加载模块)，initial(入口模块)，all(全部模块入口和动态的）
+                //---- 异步函数库，分别进行打包，按需加载,减少首屏请求数
+                // 大型第三方库，如jquery lodash vue，合并打包并做长缓存
+                vendor: {
+                    name: 'vendor',
+                    test: /[\\/]node_modules[\\/]lodash[\\/]|jquery/,
+                    priority: 10
                 },
                 logger: {
                     test: /logger/,
@@ -59,9 +66,17 @@ module.exports = {
                     name: "time",
                     priority: 5,
                     enforce: true,
-                }
+                },
+                // node_modules，也可以做长缓存，优先级最低
+                modules: {
+                    test: /node_modules/,
+                    priority: -10,
+                    name: 'modules',
+                    chunks: "all"
+                },
             }
         },
+        // 独立打包runtimeChunk
         runtimeChunk: 'single'
     },
     plugins: [
@@ -69,6 +84,7 @@ module.exports = {
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './assets/index.html')
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ]
 }

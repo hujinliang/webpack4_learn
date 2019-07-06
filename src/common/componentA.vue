@@ -9,14 +9,20 @@
 
 <script>
     import componentB from './componentB'
+    import _ from 'lodash'
     import '@style/app.scss'
+    import $ from 'jquery'
     export default {
         name: "componentA",
         components: {
             componentB
         },
+        mounted() {
+          console.log(`jquery: ${$('.container')}}`)
+        },
         methods: {
             log() {
+                console.log(_.join(['1', '2']))
                 require.ensure([], (require) => {
                     const logger = require('logger').default
                     console.log(logger)
