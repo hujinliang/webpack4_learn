@@ -7,6 +7,7 @@ const MiniCssPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const webpack = require('webpack')
 const WorkBoxPlugin = require('workbox-webpack-plugin')
+const StringReplacePlugin = require('./plugins/StringReplacePlugin')
 
 
 module.exports = {
@@ -104,6 +105,10 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new VueLoaderPlugin(),
+        new StringReplacePlugin({
+            source: 'Hello',
+            content: 'notHello'
+        }),
         new webpack.ProvidePlugin({
             $: 'jquery'
         }),
@@ -117,6 +122,7 @@ module.exports = {
             cssProcessorOptions: {safe: true, discardComments: {removeAll: true}}, //传递给 cssProcessor 的选项，默认为{}
             canPrint: true //布尔值，指示插件是否可以将消息打印到控制台，默认为 true
         }),
+        // 可以用config.entry.keys得到一个页面的List，然后每个页面对应一个template来进行打包
         new HtmlWebpackPlugin({
             title: 'hjl pageA',
             filename: 'pageA.html',
@@ -135,10 +141,10 @@ module.exports = {
             runtimeCaching: [
                 {
                     urlPattern: /\.html$/, // 匹配HTML文件
-                    handler: 'networkFirst' // 网络优先
+                    handler: 'NetworkFirst' // 网络优先
                 }
             ]
-        })
+        }),
         // new BundleAnalyzerPlugin()
     ]
 }

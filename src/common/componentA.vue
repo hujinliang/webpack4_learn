@@ -2,7 +2,7 @@
     <div class="container">
         <componentB></componentB>
         <div class="ca" @click="log">
-            我是{{info}}
+            Hello {{info}}
         </div>
     </div>
 </template>

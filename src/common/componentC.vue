@@ -1,6 +1,6 @@
 <template>
     <div>
-        我是pageB
+        Hello pageB
     </div>
 </template>
 
