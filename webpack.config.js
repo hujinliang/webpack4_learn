@@ -12,7 +12,8 @@ const WorkBoxPlugin = require('workbox-webpack-plugin')
 module.exports = {
     mode: 'production',
     entry: {
-        index: path.resolve(__dirname, './src/pageA.js')
+        pageA: path.resolve(__dirname, './src/pageA.js'),
+        pageB: path.resolve(__dirname, './src/pageB.js')
     },
     output: {
         filename: "js/[name].[chunkHash:8].js",
@@ -117,18 +118,26 @@ module.exports = {
             canPrint: true //布尔值，指示插件是否可以将消息打印到控制台，默认为 true
         }),
         new HtmlWebpackPlugin({
-            title: 'hjl webpack4',
-            filename: 'index.html',
-            minify: {
-                removeComments: true, // 移除注释
-                collapseWhitespace: true, // 移除空白和换行
-                minifyCSS: true
-            },
-            template: path.resolve(__dirname, './assets/index.html')
+            title: 'hjl pageA',
+            filename: 'pageA.html',
+            template: path.resolve(__dirname, './assets/index.html'),
+            chunks: ['pageA', 'runtime', 'vendor', 'modules']
+        }),
+        new HtmlWebpackPlugin({
+            title: 'hjl pageB',
+            filename: 'pageB.html',
+            template: path.resolve(__dirname, './assets/index.html'),
+            chunks: ['pageB', 'runtime', 'modules']
         }),
         new WorkBoxPlugin.GenerateSW({
             clientsClaim: true,
-            skipWaiting: true
+            skipWaiting: true,
+            runtimeCaching: [
+                {
+                    urlPattern: /\.html$/, // 匹配HTML文件
+                    handler: 'networkFirst' // 网络优先
+                }
+            ]
         })
         // new BundleAnalyzerPlugin()
     ]
