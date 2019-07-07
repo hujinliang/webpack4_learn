@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const webpack = require('webpack')
+const WorkBoxPlugin = require('workbox-webpack-plugin')
 
 
 module.exports = {
@@ -125,6 +126,10 @@ module.exports = {
             },
             template: path.resolve(__dirname, './assets/index.html')
         }),
+        new WorkBoxPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true
+        })
         // new BundleAnalyzerPlugin()
     ]
 }
