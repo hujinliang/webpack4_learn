@@ -1,6 +1,6 @@
 <template>
     <div @click="toast">
-        我是B
+        我是B1
     </div>
 </template>
 

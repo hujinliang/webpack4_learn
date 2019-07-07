@@ -46,7 +46,18 @@ module.exports = {
         }
     },
     devServer: {
-        contentBase: 'dist'
+        contentBase: 'dist',
+        proxy: {
+            // 跨域代理转发
+            '/comments': {
+                target: 'https://m.weibo.cn',
+                changeOrigin: true,
+                logLevel: 'debug',
+                headers: {
+                    Cookie: ''
+                }
+            }
+        },
     },
     optimization: {
         // code split
@@ -83,13 +94,6 @@ module.exports = {
                     name: 'modules',
                     chunks: "all"
                 },
-                // 提取公共样式，可以做持久化缓存
-                styles: {
-                    name: 'styles',
-                    test: /\.css|\.scss$/,
-                    chunks: 'all',
-                    enforce: true
-                }
             }
         },
         // 独立打包runtimeChunk
@@ -121,6 +125,6 @@ module.exports = {
             },
             template: path.resolve(__dirname, './assets/index.html')
         }),
-        new BundleAnalyzerPlugin()
+        // new BundleAnalyzerPlugin()
     ]
 }
