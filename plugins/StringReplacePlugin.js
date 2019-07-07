@@ -1,6 +1,5 @@
 class StringReplacePlugin {
     constructor(options) {
-        console.log(`custom plugin ${JSON.stringify(options)}`)
         this.source = options.source
         this.content = options.content
     }
@@ -25,7 +24,18 @@ class StringReplacePlugin {
                     return filelist.length;
                 }
             };
+            compilation.chunks.forEach(function(chunk){
+                console.log('=====================================');
+                console.log('chunk', chunk);
 
+                // chunk._modules.forEach(function(module){
+                //     try {
+                //         console.log('module', module._source._value);
+                //     } catch (e) {
+                //
+                //     }
+                // });
+            });
             callback();
         })
     }
