@@ -136,15 +136,17 @@ module.exports = {
             chunks: ['pageB', 'runtime', 'modules']
         }),
         new WorkBoxPlugin.GenerateSW({
+            cacheId: 'webpack-pwa',
             clientsClaim: true,
             skipWaiting: true,
+            globPatterns: ['*.{js,css,png.jpg}'],
             runtimeCaching: [
                 {
-                    urlPattern: /\.html$/, // 匹配HTML文件
-                    handler: 'NetworkFirst' // 网络优先
+                    urlPattern: /html/, // 匹配HTML文件
+                    handler: 'NetworkOnly' // 网络优先
                 }
             ]
         }),
-        // new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin()
     ]
 }
